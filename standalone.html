@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>우리 아파트 평화 지킴이 (Apartment Harmony)</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    }
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      line-height: 1.5;
+      padding-bottom: 60px;
+    }
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    /* Banner */
+    .banner {
+      background: linear-gradient(135deg, #059669, #0d9488);
+      color: white;
+      padding: 8px 16px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    /* Header */
+    header {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo-badge {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #64748b;
+    }
+    .badge-pill {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .tab-btn {
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: #e2e8f0;
+      color: #475569;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      background: #4f46e5;
+      color: white;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+    /* Section Card */
+    .card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .card-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: #0f172a;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 18px;
+    }
+    /* Grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    /* Simulator Controls */
+    .control-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .control-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .btn-group {
+      display: flex;
+      gap: 6px;
+    }
+    .choice-btn {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: white;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .choice-btn.active {
+      background: #4f46e5;
+      color: white;
+      border-color: #4f46e5;
+    }
+    /* Obstacle Item */
+    .obstacle-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+      background: white;
+      transition: all 0.2s;
+    }
+    .obstacle-item.active {
+      background: #eff6ff;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+    .obs-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .obs-icon {
+      font-size: 22px;
+    }
+    .obs-name {
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .obs-sub {
+      font-size: 11px;
+      color: #dc2626;
+      font-weight: 600;
+    }
+    .checkbox-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .obstacle-item.active .checkbox-icon {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: white;
+    }
+    /* Visual Hallway */
+    .hallway-visual {
+      background: #e2e8f0;
+      border: 2px solid #cbd5e1;
+      border-radius: 14px;
+      height: 180px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .hallway-wall-top {
+      height: 40px;
+      background: #334155;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      gap: 12px;
+    }
+    .hallway-wall-bottom {
+      height: 30px;
+      background: #334155;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      color: #94a3b8;
+      font-size: 11px;
+      justify-content: space-between;
+    }
+    .hallway-center {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+    .person-avatar {
+      position: absolute;
+      left: 15%;
+      font-size: 28px;
+      transition: all 0.3s;
+    }
+    .obstacle-zone {
+      position: absolute;
+      right: 25%;
+      display: flex;
+      gap: 8px;
+    }
+    .clearance-badge {
+      position: absolute;
+      left: 45%;
+      bottom: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    /* Metric Card */
+    .metric-box {
+      border-radius: 14px;
+      padding: 16px;
+      border: 1px solid #e2e8f0;
+    }
+    .metric-safe {
+      background: #ecfdf5;
+      border-color: #a7f3d0;
+      color: #065f46;
+    }
+    .metric-caution {
+      background: #fffbeb;
+      border-color: #fde68a;
+      color: #92400e;
+    }
+    .metric-hazard {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+    .metric-val {
+      font-size: 28px;
+      font-weight: 900;
+    }
+    /* Noise Gauge */
+    .gauge-wrapper {
+      text-align: center;
+      padding: 16px;
+    }
+    .gauge-dial {
+      width: 180px;
+      height: 90px;
+      margin: 0 auto 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    .gauge-arc {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 16px solid #e2e8f0;
+      border-top-color: #10b981;
+      border-right-color: #ef4444;
+      border-bottom-color: transparent;
+      border-left-color: #f59e0b;
+      transform: rotate(-45deg);
+      box-sizing: border-box;
+    }
+    .gauge-needle {
+      width: 4px;
+      height: 70px;
+      background: #0f172a;
+      position: absolute;
+      bottom: 0;
+      left: 88px;
+      transform-origin: bottom center;
+      transition: transform 0.4s ease-out;
+      border-radius: 4px;
+    }
+    .needle-cap {
+      width: 16px;
+      height: 16px;
+      background: #0f172a;
+      border-radius: 50%;
+      position: absolute;
+      bottom: -4px;
+      left: 82px;
+    }
+    /* Cross Section */
+    .cross-section {
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 14px;
+    }
+    .floor-upper {
+      background: #eef2ff;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .floor-slab {
+      background: #475569;
+      color: white;
+      text-align: center;
+      font-size: 10px;
+      padding: 4px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .floor-lower {
+      background: #f8fafc;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+    /* Pledge Tracker */
+    .promise-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 8px;
+      cursor: pointer;
+      background: white;
+      transition: all 0.2s;
+    }
+    .promise-item.completed {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+    .stamp-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .stamp-slot {
+      aspect-ratio: 1;
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: #f8fafc;
+    }
+    .stamp-slot.stamped {
+      border: 2px solid #f59e0b;
+      background: #fef3c7;
+    }
+    /* Button */
+    .btn-action {
+      background: #4f46e5;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-action:hover {
+      background: #4338ca;
+    }
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Privacy Banner -->
+    <div class="banner">
+      <span>🔒 <strong>[안심 프라이버시]</strong> 본 서비스는 서버로 개인정보를 전송하지 않으며, 오직 사용자 브라우저 내부(LocalStorage)에서만 동작합니다.</span>
+      <span style="opacity: 0.9;">100% 로컬 데이터 안심 보장</span>
+    </div>
+
+    <!-- App Header -->
+    <header>
+      <div class="header-left">
+        <div class="logo-badge">🏢</div>
+        <div>
+          <h1>우리 아파트 평화 지킴이</h1>
+          <p class="subtitle">꿈마을 104동 502호 11세 김민준 학생 & 이웃 협력 프로젝트</p>
+        </div>
+      </div>
+      <div class="badge-pill">
+        <span>⭐ 평화 스티커</span>
+        <span id="headerStickerCount">3개 달성</span>
+      </div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('hallway')">🛴 복도 안전 & 통행지수</button>
+      <button class="tab-btn" onclick="switchTab('noise')">🎧 층간소음 쿵쾅지수 시뮬레이터</button>
+      <button class="tab-btn" onclick="switchTab('pledge')">⭐ 이웃 평화 약속 & 스티커판</button>
+    </div>
+
+    <!-- TAB 1: Hallway Simulator -->
+    <section id="tab-hallway">
+      <div class="card">
+        <div class="card-title">복도 공간 안전 및 통행지수 시뮬레이터</div>
+        <p class="card-desc">아파트 복도에 놓인 킥보드, 자전거, 택배 박스가 비상 대피 통로와 119 구급대 들것(60cm) 통행에 미치는 영향을 계산합니다.</p>
+
+        <div class="grid-2">
+          <!-- Controls -->
+          <div class="control-box">
+            <span class="control-label">📍 층수 선택</span>
+            <div class="btn-group" style="margin-bottom: 12px;">
+              <button class="choice-btn active" onclick="setFloor(this, '5')">5층 (민준이네)</button>
+              <button class="choice-btn" onclick="setFloor(this, '3')">3층 저층</button>
+              <button class="choice-btn" onclick="setFloor(this, '10')">10층 고층</button>
+            </div>
+
+            <span class="control-label">📐 복도 구조 타입</span>
+            <div class="btn-group">
+              <button class="choice-btn active" onclick="setHallwayType(this, 140, 120)">단면 복도 (140cm)</button>
+              <button class="choice-btn" onclick="setHallwayType(this, 180, 150)">양면 복도 (180cm)</button>
+            </div>
+          </div>
+
+          <!-- Status Result -->
+          <div id="hallwayStatusBox" class="metric-box metric-safe">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:12px; font-weight:700;">실시간 통행 안전 지수</span>
+              <span id="hallwayBadge" style="font-size:12px; font-weight:800; padding:2px 8px; border-radius:9999px; background:white;">안전 (Safe)</span>
+            </div>
+            <div style="margin-top:10px;">
+              <span style="font-size:11px;">남은 유효 통행 폭:</span>
+              <div class="metric-val"><span id="netWidthText">105</span> <span style="font-size:14px;">cm</span></div>
+            </div>
+            <p id="hallwayAdviseText" style="font-size:12px; margin-top:8px; font-weight:600;">
+              통행 안전 기준 충족! 119 구급대 들것(60cm) 및 휠체어 통행이 가능합니다.
+            </p>
+          </div>
+        </div>
+
+        <!-- Visual Hallway -->
+        <div class="hallway-visual">
+          <div class="hallway-wall-top">
+            <span>🚪 501호</span>
+            <span>🏠 502호 (민준이네)</span>
+            <span style="margin-left:auto; background:#dc2626; padding:2px 6px; border-radius:4px; font-size:10px;">🧯 비상소화전</span>
+          </div>
+          <div class="hallway-center">
+            <div class="person-avatar" id="avatarEmoji">👦</div>
+            <div class="obstacle-zone" id="visualObstacles">
+              <span style="font-size:24px;">🛴</span>
+            </div>
+            <div class="clearance-badge" id="clearanceBadge">남은 너비: 105cm</div>
+          </div>
+          <div class="hallway-wall-bottom">
+            <span>단지 비상 대피 통로</span>
+            <span style="color:#4ade80; font-weight:700;">🏃 비상계단 피난구 ➡️</span>
+          </div>
+        </div>
+
+        <!-- Obstacles Click List -->
+        <span class="control-label" style="margin-bottom:8px;">📦 복도 적치물 모의 배치 (클릭하여 켜고 끄기)</span>
+        <div class="grid-3">
+          <div class="obstacle-item active" onclick="toggleObstacle(this, 'kickboard', 35, '🛴')">
+            <div class="obs-left">
+              <span class="obs-icon">🛴</span>
+              <div>
+                <div class="obs-name">어린이 킥보드</div>
+                <div class="obs-sub">-35cm 잠식</div>
+              </div>
+            </div>
+            <div class="checkbox-icon">✓</div>
+          </div>
+
+          <div class="obstacle-item" onclick="toggleObstacle(this, 'bicycle', 50, '🚲')">
+            <div class="obs-left">
+              <span class="obs-icon">🚲</span>
+              <div>
+                <div class="obs-name">어린이 자전거</div>
+                <div class="obs-sub">-50cm 잠식</div>
+              </div>
+            </div>
+            <div class="checkbox-icon"></div>
+          </div>
+
+          <div class="obstacle-item" onclick="toggleObstacle(this, 'box', 40, '📦')">
+            <div class="obs-left">
+              <span class="obs-icon">📦</span>
+              <div>
+                <div class="obs-name">배송 택배 박스</div>
+                <div class="obs-sub">-40cm 잠식</div>
+              </div>
+            </div>
+            <div class="checkbox-icon"></div>
+          </div>
+
+          <div class="obstacle-item" onclick="toggleObstacle(this, 'stroller', 55, '🚼')">
+            <div class="obs-left">
+              <span class="obs-icon">🚼</span>
+              <div>
+                <div class="obs-name">접이식 유모차</div>
+                <div class="obs-sub">-55cm 잠식</div>
+              </div>
+            </div>
+            <div class="checkbox-icon"></div>
+          </div>
+        </div>
+
+        <div style="background:#0f172a; color:#cbd5e1; padding:12px; border-radius:10px; font-size:12px; margin-top:16px;">
+          <strong style="color:#fbbf24;">소방법 제16조 안내:</strong> 아파트 복도와 계단은 화재 대피 생명선입니다. 킥보드는 현관문 안쪽이나 1층 보관대에 보관해 주세요!
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Noise Simulator -->
+    <section id="tab-noise" style="display:none;">
+      <div class="card">
+        <div class="card-title">층간소음 쿵쾅지수 시뮬레이터</div>
+        <p class="card-desc">아이들의 활동(뛰기·점프)과 소음 방지 용품(슬리퍼·매트) 착용 시 아래층에 전달되는 데시벨(dB)을 시뮬레이션합니다.</p>
+
+        <div class="grid-2">
+          <!-- Controls -->
+          <div>
+            <div class="control-box" style="margin-bottom:12px;">
+              <span class="control-label">⏰ 시간대 선택 (법정 기준)</span>
+              <div class="btn-group">
+                <button class="choice-btn active" onclick="setTimeSlot(this, 'evening', 36)">저녁 안식 (20~22시)</button>
+                <button class="choice-btn" onclick="setTimeSlot(this, 'day', 39)">주간 (08~20시)</button>
+                <button class="choice-btn" onclick="setTimeSlot(this, 'night', 34)">심야 (22~07시)</button>
+              </div>
+            </div>
+
+            <div class="control-box" style="margin-bottom:12px;">
+              <span class="control-label">🏃 활동 강도 선택</span>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <button class="choice-btn" onclick="setActivity(this, 10, '일반 걷기', '🚶')">🚶 일반 걷기 (+10 dB)</button>
+                <button class="choice-btn active" onclick="setActivity(this, 30, '실내 달리기/우다다', '🏃')">🏃 실내 달리기 (+30 dB)</button>
+                <button class="choice-btn" onclick="setActivity(this, 45, '소파에서 점프!', '🦘')">🦘 소파에서 점프 (+45 dB)</button>
+              </div>
+            </div>
+
+            <div class="control-box">
+              <span class="control-label">🛡️ 소음 완화 용품 (중복 선택)</span>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <div class="obstacle-item active" onclick="toggleMitigation(this, 15)">
+                  <div class="obs-left"><span>🩴</span><span class="obs-name">소음방지 슬리퍼 (-15 dB)</span></div>
+                  <div class="checkbox-icon">✓</div>
+                </div>
+                <div class="obstacle-item" onclick="toggleMitigation(this, 20)">
+                  <div class="obs-left"><span>🟩</span><span class="obs-name">4cm EVA 놀이매트 (-20 dB)</span></div>
+                  <div class="checkbox-icon"></div>
+                </div>
+                <div class="obstacle-item" onclick="toggleMitigation(this, 5)">
+                  <div class="obs-left"><span>🧦</span><span class="obs-name">두꺼운 층간소음 양말 (-5 dB)</span></div>
+                  <div class="checkbox-icon"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gauge & Cutaway -->
+          <div>
+            <div class="gauge-wrapper">
+              <div class="gauge-dial">
+                <div class="gauge-arc"></div>
+                <div class="gauge-needle" id="gaugeNeedle"></div>
+                <div class="needle-cap"></div>
+              </div>
+              <div style="font-size:32px; font-weight:900;" id="decibelValue">65 dB</div>
+              <div id="noiseStatusBadge" style="font-size:12px; font-weight:700; color:#ef4444;">갈등 위험 (> 43 dB)</div>
+            </div>
+
+            <div class="cross-section">
+              <div class="floor-upper">
+                <div>
+                  <div style="font-size:11px; font-weight:700; color:#4338ca;">502호 민준이 방</div>
+                  <div id="upperActivityDesc" style="font-size:12px; font-weight:600;">🏃 실내 달리기 중</div>
+                </div>
+                <span id="minjunAvatar" style="font-size:24px;">👦</span>
+              </div>
+              <div class="floor-slab">210mm 철근 콘크리트 슬래브</div>
+              <div class="floor-lower" id="lowerFloorBox">
+                <div>
+                  <div style="font-size:11px; font-weight:700; color:#334155;">402호 아래층 김할아버지 댁</div>
+                  <div id="lowerStatusDesc" style="font-size:12px; font-weight:600; color:#dc2626;">😫 "천장이 쿵쾅거려요!"</div>
+                </div>
+                <span id="grandpaAvatar" style="font-size:24px;">👴⚡</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Pledge Tracker -->
+    <section id="tab-pledge" style="display:none;">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div>
+            <div class="card-title">이웃 평화 약속 & 칭찬 스티커판</div>
+            <p class="card-desc" style="margin-bottom:0;">오늘 실천한 약속을 체크하고 도장을 모아 평화 마스터에 도전하세요!</p>
+          </div>
+          <button class="btn-action" onclick="stampSticker()">🌟 칭찬 도장 찍기!</button>
+        </div>
+
+        <div class="grid-2">
+          <!-- Checkboxes -->
+          <div>
+            <div class="promise-item completed" onclick="togglePromiseItem(this)">
+              <div>
+                <strong style="font-size:13px;">🩴 저녁 8시 이후 소음방지 슬리퍼 신기</strong>
+                <div style="font-size:11px; color:#64748b;">발뒤꿈치 쿵쿵거림을 줄여요.</div>
+              </div>
+              <div class="checkbox-icon" style="background:#10b981; border-color:#10b981; color:white;">✓</div>
+            </div>
+
+            <div class="promise-item completed" onclick="togglePromiseItem(this)">
+              <div>
+                <strong style="font-size:13px;">🤫 실내에서는 사뿐사뿐 걷기</strong>
+                <div style="font-size:11px; color:#64748b;">닌자처럼 조용히 발끝으로 걸어요.</div>
+              </div>
+              <div class="checkbox-icon" style="background:#10b981; border-color:#10b981; color:white;">✓</div>
+            </div>
+
+            <div class="promise-item" onclick="togglePromiseItem(this)">
+              <div>
+                <strong style="font-size:13px;">🛴 킥보드는 현관문 안쪽에 보관하기</strong>
+                <div style="font-size:11px; color:#64748b;">복도 비상 피난로를 항상 비워둬요.</div>
+              </div>
+              <div class="checkbox-icon"></div>
+            </div>
+
+            <div class="promise-item completed" onclick="togglePromiseItem(this)">
+              <div>
+                <strong style="font-size:13px;">👋 이웃 만나면 먼저 다정하게 인사하기</strong>
+                <div style="font-size:11px; color:#64748b;">"안녕하세요!" 한마디로 갈등 예방!</div>
+              </div>
+              <div class="checkbox-icon" style="background:#10b981; border-color:#10b981; color:white;">✓</div>
+            </div>
+
+            <div style="margin-top:12px; display:flex; gap:8px;">
+              <button class="btn-secondary" onclick="resetPledgeData()">기록 초기화</button>
+            </div>
+          </div>
+
+          <!-- Sticker Board -->
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong style="font-size:14px;">🌟 10-스탬프 보드</strong>
+              <span id="stampScoreText" style="font-size:12px; font-weight:800; color:#d97706;">3 / 10개 완주</span>
+            </div>
+            <div class="stamp-grid" id="stampGrid">
+              <!-- Rendered via JS -->
+            </div>
+            <div style="font-size:11px; color:#64748b; line-height:1.6;">
+              🌱 1개: 새싹 이웃 뱃지<br>
+              🛡️ 5개: 복도 안전 보안관 뱃지<br>
+              🏆 10개: 우리 아파트 평화 마스터 트로피!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // State
+    let hallwayWidth = 140;
+    let minLegalWidth = 120;
+    let activeObstacles = [{ id: 'kickboard', width: 35, icon: '🛴' }];
+
+    let activityDb = 30;
+    let mitigationsDb = 15;
+    let stickers = 3;
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      document.getElementById('tab-hallway').style.display = tabId === 'hallway' ? 'block' : 'none';
+      document.getElementById('tab-noise').style.display = tabId === 'noise' ? 'block' : 'none';
+      document.getElementById('tab-pledge').style.display = tabId === 'pledge' ? 'block' : 'none';
+    }
+
+    function setFloor(btn, floor) {
+      btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function setHallwayType(btn, width, minLegal) {
+      btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      hallwayWidth = width;
+      minLegalWidth = minLegal;
+      updateHallway();
+    }
+
+    function toggleObstacle(el, id, width, icon) {
+      const idx = activeObstacles.findIndex(o => o.id === id);
+      const checkbox = el.querySelector('.checkbox-icon');
+      if (idx > -1) {
+        activeObstacles.splice(idx, 1);
+        el.classList.remove('active');
+        checkbox.innerHTML = '';
+      } else {
+        activeObstacles.push({ id, width, icon });
+        el.classList.add('active');
+        checkbox.innerHTML = '✓';
+      }
+      updateHallway();
+    }
+
+    function updateHallway() {
+      const totalObsWidth = activeObstacles.reduce((s, o) => s + o.width, 0);
+      const netWidth = Math.max(15, hallwayWidth - totalObsWidth);
+
+      document.getElementById('netWidthText').innerText = netWidth;
+      document.getElementById('clearanceBadge').innerText = `남은 너비: ${netWidth}cm`;
+
+      const visualZone = document.getElementById('visualObstacles');
+      visualZone.innerHTML = activeObstacles.map(o => `<span style="font-size:24px;">${o.icon}</span>`).join('');
+
+      const box = document.getElementById('hallwayStatusBox');
+      const badge = document.getElementById('hallwayBadge');
+      const advise = document.getElementById('hallwayAdviseText');
+
+      box.className = 'metric-box';
+      if (netWidth < 90) {
+        box.classList.add('metric-hazard');
+        badge.innerText = '위험 (Hazard)';
+        advise.innerText = '소방법 위반! 119 구급대 들것(60cm) 진입 불가 및 화재 피난 지체 위험';
+      } else if (netWidth < minLegalWidth) {
+        box.classList.add('metric-caution');
+        badge.innerText = '주의 (Caution)';
+        advise.innerText = '통행 주의! 일반 보행은 가능하나 비상 대피 시 지체 우려';
+      } else {
+        box.classList.add('metric-safe');
+        badge.innerText = '안전 (Safe)';
+        advise.innerText = '통행 안전 기준 충족! 119 구급대 들것(60cm) 및 휠체어 원활 통행 가능';
+      }
+    }
+
+    function setTimeSlot(btn, slot, threshold) {
+      btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateNoise();
+    }
+
+    function setActivity(btn, db, name, icon) {
+      btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activityDb = db;
+      document.getElementById('upperActivityDesc').innerText = `${icon} ${name} 중`;
+      updateNoise();
+    }
+
+    function toggleMitigation(el, db) {
+      const checkbox = el.querySelector('.checkbox-icon');
+      if (el.classList.contains('active')) {
+        el.classList.remove('active');
+        checkbox.innerHTML = '';
+        mitigationsDb -= db;
+      } else {
+        el.classList.add('active');
+        checkbox.innerHTML = '✓';
+        mitigationsDb += db;
+      }
+      updateNoise();
+    }
+
+    function updateNoise() {
+      const peakDb = Math.max(25, 50 + activityDb - mitigationsDb);
+      document.getElementById('decibelValue').innerText = `${peakDb} dB`;
+
+      // Needle angle: 25 -> -90deg, 70 -> +90deg
+      const angle = Math.min(90, Math.max(-90, ((peakDb - 25) / 45) * 180 - 90));
+      document.getElementById('gaugeNeedle').style.transform = `rotate(${angle}deg)`;
+
+      const badge = document.getElementById('noiseStatusBadge');
+      const lowerBox = document.getElementById('lowerFloorBox');
+      const lowerDesc = document.getElementById('lowerStatusDesc');
+      const grandpa = document.getElementById('grandpaAvatar');
+
+      if (peakDb > 43) {
+        badge.innerText = '갈등 위험 (> 43 dB)';
+        badge.style.color = '#ef4444';
+        lowerBox.style.background = '#fee2e2';
+        lowerDesc.innerText = '😫 "천장이 쿵쾅거려요!"';
+        grandpa.innerText = '👴⚡';
+      } else if (peakDb >= 38) {
+        badge.innerText = '주의 (38~43 dB)';
+        badge.style.color = '#f59e0b';
+        lowerBox.style.background = '#fef3c7';
+        lowerDesc.innerText = '🤨 "어디선가 쿵쿵 소리가 나네..."';
+        grandpa.innerText = '👴❓';
+      } else {
+        badge.innerText = '안전 (< 38 dB)';
+        badge.style.color = '#10b981';
+        lowerBox.style.background = '#ecfdf5';
+        lowerDesc.innerText = '☕ 조용해서 신문 읽으며 편안히 쉬고 계세요';
+        grandpa.innerText = '👴';
+      }
+    }
+
+    function togglePromiseItem(el) {
+      el.classList.toggle('completed');
+      const box = el.querySelector('.checkbox-icon');
+      if (el.classList.contains('completed')) {
+        box.style.background = '#10b981';
+        box.style.borderColor = '#10b981';
+        box.style.color = 'white';
+        box.innerText = '✓';
+      } else {
+        box.style.background = 'white';
+        box.style.borderColor = '#cbd5e1';
+        box.innerText = '';
+      }
+    }
+
+    function stampSticker() {
+      if (stickers < 10) {
+        stickers++;
+        renderStamps();
+        alert(`🌟 칭찬 도장을 찍었습니다! (${stickers}/10개 달성)`);
+      } else {
+        alert('🏆 10개 완주! 우리 아파트 평화 마스터가 되셨습니다!');
+      }
+    }
+
+    function resetPledgeData() {
+      if (confirm('스티커 기록을 초기화하시겠습니까?')) {
+        stickers = 0;
+        renderStamps();
+      }
+    }
+
+    function renderStamps() {
+      document.getElementById('headerStickerCount').innerText = `${stickers}개 달성`;
+      document.getElementById('stampScoreText').innerText = `${stickers} / 10개 완주`;
+      const grid = document.getElementById('stampGrid');
+      grid.innerHTML = '';
+      for (let i = 0; i < 10; i++) {
+        const stamped = i < stickers;
+        const icon = i === 9 ? '🏆' : i === 4 ? '🛡️' : '⭐';
+        grid.innerHTML += `
+          <div class="stamp-slot ${stamped ? 'stamped' : ''}">
+            ${stamped ? icon : `<span style="font-size:11px; color:#cbd5e1;">#${i+1}</span>`}
+          </div>
+        `;
+      }
+    }
+
+    // Initialize
+    updateHallway();
+    updateNoise();
+    renderStamps();
+  </script>
+</body>
+</html>
